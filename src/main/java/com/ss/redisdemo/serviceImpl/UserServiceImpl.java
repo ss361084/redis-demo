@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	@CacheEvict(value = "saveUser", keyGenerator = "keyGenerator")
+	@CachePut(value = "saveUser", keyGenerator = "keyGenerator")
 	@Override
 	public UserDto saveUser(UserDto userDto) {
 		log.info("Request For Save User");

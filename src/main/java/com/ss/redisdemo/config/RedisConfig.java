@@ -1,6 +1,7 @@
 package com.ss.redisdemo.config;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +51,12 @@ public class RedisConfig {
 	
 	@Bean
 	public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-	    return RedisCacheManager.builder(connectionFactory)
-    	    .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
-    	    .transactionAware()
-    	    .withInitialCacheConfigurations(Collections.singletonMap("predefined",RedisCacheConfiguration.defaultCacheConfig().disableCachingNullValues()))
-    	    .build();
+		RedisCacheConfiguration cacheConfiguration = 
+	            RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)); // This sets the time to live for cache entries
+		
+		// Return a new RedisCacheManager built with default configurations and transaction awareness
+        return RedisCacheManager.builder(connectionFactory).cacheDefaults(cacheConfiguration)
+            .transactionAware().build();
 	}
 	
 	@Bean
